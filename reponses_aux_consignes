@@ -17,8 +17,10 @@ Temps nécessaire : 4h
 
 Difficultés :
 L’utilisation de git n’a pas été abordée dans ma formation, et je ne m’en suis jamais servi que dans le cadre d’AndroidStudio pour les commit, branchs 
-et merge, je l’ai donc laissé de côté par souci de temps. Je pense toutefois que je n’aurai pas besoin de beaucoup de temps pour apprendre à le maîtriser.
-En outre, le passage du notebook à un script R me bloque pour une cause que je n'arrive pas à identifier.
+et merge, je l’ai donc laissé de côté par souci de temps. Je pense toutefois que je n’aurais pas besoin de beaucoup de temps pour apprendre à m'en 
+servir correctement.
+En outre, le passage du notebook à un script R me bloque pour une cause que je n'arrive pas à identifier. Faute de temps, je n'ai pu aborder la 
+question 2.
 
 #Élections présidentielles :
 Vous trouverez dans le dossier data un fichier CSV nommé resultats-par-niveau-burvot-t1-france-entiere.xlsx. Ces données sont issues du Ministère de 
