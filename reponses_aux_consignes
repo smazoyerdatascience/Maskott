@@ -1,0 +1,85 @@
+#Test technique - Développeur Data Science
+
+#Registre national des copropriétés
+Vous trouverez dans le dossier data un fichier CSV nommé registre-national-coproprietes-data-gouv-with-qpv-1.csv. Ces données sont issues du Registre National des Copropriétés.
+
+Vous créerez un programme R que vous intégrerez à ce projet dans un sous-dossier.
+
+Obtenez la distribution statistique des copropriétés par tranche de lots (2-10, 11-30, 31-50, 51-100, 101-200, +200) pour les différents arrondissements lyonnais.
+Générez une carte sur laquelle vous placerez des marqueurs ronds dont la taille variera en fonction de la proportion de copropriété gérées de manière coopérative. Par exemple, si pour la ville du Mans, le pourcentage de copropriétés gérées de manière coopérative est plus important qu'à Nice, le marqueur du Mans devra être plus gros que celui de Nice.
+
+Temps estimé : 4h
+Temps nécessaire : 4h
+
+Difficultés :
+L’utilisation de git n’a pas été abordée dans ma formation, et je ne m’en suis jamais servi que dans le cadre d’AndroidStudio pour les commit, branchs et merge, je l’ai donc laissé de côté par souci de temps. Je pense toutefois que je n’aurai pas besoin de beaucoup de temps pour apprendre à le maîtriser.
+
+#Élections présidentielles :
+Vous trouverez dans le dossier data un fichier CSV nommé resultats-par-niveau-burvot-t1-france-entiere.xlsx. Ces données sont issues du Ministère de l'intérieur.
+
+Vous créerez un programme Python que vous intégrerez à ce projet dans un sous-dossier.
+
+Calculez la moyenne du taux d'abstention par département.
+Pour chaque candidat, identifiez les 10 bureaux de vote dans lesquels il/elle a obtenu le plus de voix.
+Pour chaque candidat, identifiez les 10 bureaux de vote dans lesquels il/elle a obtenu le plus de suffrages exprimés.
+Sélectionnez trois colonnes qui vous seront utiles pour prédire les résultats d'Emmanuel Macron. Précisez ci-dessous pourquoi vous avez choisi ces colonnes.
+
+Choix des colonnes :
+
+Pour un premier essai, dont je me doutais être trop ambitieux, je suis parti sur les bases suivantes :
+En target, j’ai choisi la colonne correspondant au nombre de voix/ nombre de votes exprimés.
+J’ai supposé que le score d’Emmanuel Macron dépendait aussi du département, j’ai donc choisi la colonne Code du département, ainsi que la colonne Exprimés. Pour effectuer une régression, comme le n° de département correspond à un ordre arbitraire, j’ai utilisé le OneHotEncoding pour le rendre indépendant de l’ordre. Toutefois le score R2 après modélisation a été très faibles. Il faudrait sûrement plus de données par département pour obtenir un résultat intéressant.
+
+Dans un deuxième essai, plus raisonnable, j’ai choisi comme target le nombre de voix obtenu par Emmanuel Macron. En variables j’ai considéré les colonnes Inscrits et Exprimés, qui sont du même ordre de grandeur. J’étais bien conscient qu’il y avait un potentiel data leakage entre les deux variables choisies. Le score R2 a significativement été amélioré.
+
+Pour évaluer la présence d’un data leakage dans la modélisation précédente, j’ai repris sur le notebook la même target, le colonne Inscrits ainsi que la colonne % Abs/Inscrit, qui est, a priori, entièrement décorrélé avec la première. Il faut procéder alors à un rescaling des données pour les mettre au même ordre de grandeur. Le score R2 n’a quasiment pas varié par rapport à la modélisation précédente, ce qui laisse à supposer qu’il n’y a pas eu de data leakage dans la modélisation précédente.
+
+Créez un modèle de machine learning permettant de prédire le résultat d'Emmanuel Macron sur la base des colonnes sélectionnées. Vous utiliserez 60% de la base à des fins d'entraînement, et le reste pour de la validation).
+Calculez le coefficient de corrélation de Pearson pour les données de test et les données de validation.
+
+Temps estimé : 8h
+Temps nécessaire : 6h30
+
+Je m’y suis mal pris à deux reprises, pour télécharger les données sur bitbucket, ne connaissant pas ce dernier. Du coup, pensant avoir affaire à un fichier corrompu, je suis allé chercher les données à la source sur internet. Il a fallu ensuite que je convertisse le fichier .xls, trop lent à charger, en .csv.
+Le choix des colonnes a été problématique, car même si je ne voulais pas commencer par l’artillerie lourde, j’avais envie de tenter quelque chose d’ambitieux, ce qui s’est avéré non efficace. Toutefois cela n’a pas pris beaucoup de temps.
+
+
+
+#Questions complémentaires :
+
+Pouvez-vous nous dire à quoi servent les index d'une table MySQL ou PostgreSQL ?
+
+Quelles sont les différents types de jointure SQL et à quoi servent-elles ?
+
+
+Index d’une table SQL :
+
+Un index est une liste ordonnée se rapportant à une ou plusieurs colonnes d’une table. L’index stocke ces valeurs triées, ce qui permet d’y accéder de manière plus rapide. 
+Sur une même table, plusieurs index peuvent être créés pour des ensembles de colonnes différentes.
+Un index unique sur une ou plusieurs colonnes permet de s’assurer que l’on n’insère pas plusieurs fois la même valeur pour ces colonnes.
+
+
+Types de jointures SQL :
+
+Il existe deux types de jointures, internes et externes, qui permettent de joindre plusieurs tables.
+
+Lorsque dans deux tables différentes, deux colonnes correspondent l’une à l’autre, par exemple la plaque d’immatriculation de véhicules, la jointure interne permet de récupérer les informations des deux tables correspondant à un même véhicule en les joignant.
+
+Par exemple si la table consommation contient les colonnes immatriculation, consommation_au_100km et masse_du_véhicule, et la table caracteristiques contient les colonnes immatriculation, vitesse_de_pointe, taille_des_pneus :
+
+SELECT caractéristiques.taille_des_pneus
+FROM caracteristiques
+INNER JOIN consommation
+	ON consommation.immatriculation = caracteristiques.immatriculation
+WHERE consommation.masse_du_véhicule > 1000
+
+La requête précédente renvoie la colonne taille_des_pneus pour les véhicules de masse supérieur à 1000.
+
+Dans ce cas, où les deux colonnes servant à faire la jointure, portent le même nom dans chaque table, il est possible d’utiliser une jointure naturel, ce qui simplifie la syntaxe de la requète.
+
+Les requêtes externes (OUTER JOIN) correspondent à une situation pour laquelle il n’y pas de correspondance parfaite entre les lignes de la table 1 (table de gauche, après le FROM) à joindre avec la table 2 (table de droite).
+
+Dans la jointure externe par la gauche (LEFT JOIN), les lignes de la table de gauche n’ayant pas de correspondance dans la table de droite sont aussi sélectionnées, tandis que dans la jointure externe par la droite (RIGHT JOIN), ce sont les lignes de la table de droite qui sont aussi sélectionnées en plus.
+
+Temps estimé : 30 min
+Temps nécessaire : 40 min
