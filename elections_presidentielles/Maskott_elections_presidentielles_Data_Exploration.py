@@ -137,6 +137,11 @@ rfr=RandomForestRegressor(max_depth=10, n_jobs=-1, random_state=0)
 
 rfr.fit(X_train, y_train)
 
+print("Choix d'un randomForestRegressor avec les colonnes : Voix exprimées, Code du département par commune, et ratio Voix/vote exprimé de M.Macron")
+
+print("\nScore du modèle RandomForestRegressor :", rfr.score(X_test,y_test))
+#Le modèle ne fournit pas de bonnes prédictions et le choix des colonnes est sûrement trop ambitieux
+
 
 y_pred=rfr.predict(X_test)
 
@@ -148,9 +153,29 @@ y_pred_series=pd.Series(y_pred)
 
 pearson=y_test.corr(y_pred_series)
 
+print ("Coefficient de pearson pour le modèle RandomForestRegressor avec les 3 colonnes choisies :", pearson,"\n\n")
 
-print ("\n\nCoefficient de pearson pour le modèle RandomForestRegressor avec les 3 colonnes choisies :", pearson)
+print("Choix d'une regression linéaire avec les colonnes : Inscrits, Abstensions par commune, et Voix de M.Macron")
+df_macron=df_results[['Inscrits', 'Abstentions','Unnamed: 39']]
+X=df_macron[["Inscrits", "Abstentions"]]
+y=df_macron["Unnamed: 39"]
+X_train, X_test, y_train, y_test=train_test_split(X, y, test_size=0.4, random_state=0)
 
+#Import du LinearRegressor
+from sklearn.linear_model import LinearRegression
+
+lr=LinearRegression()
+lr.fit(X_train,y_train)
+
+print("\nScore du modèle LinearRegression avec les 3 colonnes choisies :", lr.score(X_test,y_test))
+
+y_pred=lr.predict(X_test)
+
+y_pred_series=pd.Series(y_pred)
+
+pearson=y_test.corr(y_pred_series)
+
+print ("Coefficient de pearson pour le modèle LinearRegression avec les 3 colonnes choisies :", pearson,"\n\n")
 
 
 
